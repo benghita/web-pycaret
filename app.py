@@ -136,7 +136,9 @@ def main():
         else : st.warning('Can not specify the task')
         
         st.subheader('The Best Model :')
-        best = st.session_state.autom.s.compare_models()
+        if  st.session_state.changed :
+            best = st.session_state.autom.s.compare_models()
+            st.session_state.changed = False
         st.markdown(best)
 
         leaderboard = st.session_state.autom.s.get_leaderboard()
@@ -144,39 +146,19 @@ def main():
         st.write(leaderboard.drop(columns=['Model']))
 
         #st.subheader('Plot Residuals : ')
-        #st.session_state.autom.s.plot_model(best, plot='residuals', display_format = 'streamlit')
+        #st.session_state.autom.s.plot_model(best, plot='residuals_interactive', display_format = 'streamlit')
 #
-        #st.subheader('Plot Error : ')
-        #st.session_state.autom.s.plot_model(best, plot = 'error',  display_format = 'streamlit')
-        #st.pyplot(plt.gcf())
-        #
-        #st.subheader('Plot Feature Importance : ')
-        #st.session_state.autom.s.plot_model(best, plot = 'feature',  display_format = 'streamlit')
-        #st.pyplot(plt.gcf())
+        st.subheader('Analyzes the performance of the best model : ')
+        st.markdown('Plot Error : ')
+        st.session_state.autom.s.plot_model(best, plot = 'error',  display_format = 'streamlit')
+        st.markdown('Plot residuals : ')
+        st.session_state.autom.s.plot_model(best, plot='residuals', display_format = 'streamlit')
 
-        #best_model_name, best_model, best_scores = st.session_state.autom.best_model()
-        #st.write("Best model : ", best_model_name)
-        #st.write("Best model scores : ", best_scores)
-#
-        #
-        #file_1 = pickle_model(best)
-        #if st.download_button("Download the best model as .pkl file", data=file_1, file_name="best-model.pkl"
-        #                        ) :
-        #    st.success('Model downloaded successfully!')
-#
-        #file_2 = pickle_model(st.session_state.autom.getmodels())
-        #if st.download_button("Download the trained models as .pkl file", data=file_2, file_name="trained_models.pkl"
-        #                        ) :
-        #    st.success('Models downloaded successfully!')
-#
-        #csv = st.session_state.autom.df.to_csv().encode('utf-8')
-        #st.download_button(
-        #    label="Download the preprocessed dataset as CSV",
-        #    data=csv,
-        #    file_name='preprocessed_df.csv',
-        #    mime='text/csv',
-        #    use_container_width=True
-        #)
+        file_1 = pickle_model(best)
+        if st.download_button("Download the best model as .pkl file", data=file_1, file_name="best-model.pkl"
+                                ) :
+            st.success('Model downloaded successfully!')
+
             
 if __name__ == "__main__":
     main()
