@@ -80,7 +80,7 @@ def main():
             availble_cols = st.session_state.autom.df.columns.tolist()
             features = [x for x in availble_cols if x != st.session_state.target]
             
-            st.multiselect('Select columns to delete:', features, key = 'type_to_drp')
+            st.multiselect('Select columns to delete:', features, key = 'col_to_drp')
 
             st.form_submit_button("Apply changes", on_click = next)
 
@@ -94,7 +94,7 @@ def main():
                         st.session_state.ctg_impute,
                         st.session_state.number,
                         st.session_state.category,
-                        st.session_state.type_to_drp
+                        st.session_state.col_to_drp
                     )
             st.session_state.autom.s.setup(st.session_state.autom.df, target = st.session_state.autom.target)
             st.session_state.changed = True
@@ -137,22 +137,29 @@ def main():
         
         st.subheader('The Best Model :')
         if  st.session_state.changed :
-            best = st.session_state.autom.s.compare_models()
+            st.session_state.best = st.session_state.autom.s.compare_models()
             st.session_state.changed = False
+
+        best = st.session_state.best
         st.markdown(best)
 
         leaderboard = st.session_state.autom.s.get_leaderboard()
         st.subheader('Leaderboard of the trained models  :')
         st.write(leaderboard.drop(columns=['Model']))
 
-        #st.subheader('Plot Residuals : ')
-        #st.session_state.autom.s.plot_model(best, plot='residuals_interactive', display_format = 'streamlit')
-#
-        st.subheader('Analyzes the performance of the best model : ')
-        st.markdown('Plot Error : ')
-        st.session_state.autom.s.plot_model(best, plot = 'error',  display_format = 'streamlit')
-        st.markdown('Plot residuals : ')
-        st.session_state.autom.s.plot_model(best, plot='residuals', display_format = 'streamlit')
+        st.subheader('Analyze the performance of the best model : ')
+        
+        if st.session_state.autom.task == 'R' : 
+            st.markdown('Plot Error : ')
+            st.session_state.autom.s.plot_model(best, plot = 'error',  display_format = 'streamlit')
+            st.markdown('Plot residuals : ')
+            st.session_state.autom.s.plot_model(best, plot='residuals', display_format = 'streamlit')
+
+        elif st.session_state.autom.task == 'C' : 
+            st.markdown('Area Under the Curve : ')
+            st.session_state.autom.s.plot_model(best, plot = 'auc',  display_format = 'streamlit')
+            st.markdown('Confusion Matrix : ')
+            st.session_state.autom.s.plot_model(best, plot='confusion_matrix', display_format = 'streamlit')
 
         file_1 = pickle_model(best)
         if st.download_button("Download the best model as .pkl file", data=file_1, file_name="best-model.pkl"

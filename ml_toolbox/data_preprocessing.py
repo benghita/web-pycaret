@@ -19,13 +19,12 @@ def handle_missing_values(data, num_imputation_type='mean', categorical_imputati
     Returns:
         DataFrame: The original DataFrame with missing values handled according to the specified strategy.
     """
-    if num_imputation_type != 'drop':
-        numerical_cols = data.select_dtypes(include=['number']).columns
-        imputer = SimpleImputer(strategy=num_imputation_type, fill_value=numerical_imputation_value)
-        data[numerical_cols] = imputer.fit_transform(data[numerical_cols])
-
-    if categorical_imputation_type != 'drop':
-        categorical_cols = data.select_dtypes(include=['object']).columns
+    numerical_cols = data.select_dtypes(include=['number']).columns
+    imputer = SimpleImputer(strategy=num_imputation_type, fill_value=numerical_imputation_value)
+    data[numerical_cols] = imputer.fit_transform(data[numerical_cols])
+    
+    categorical_cols = data.select_dtypes(include=['object']).columns
+    if len(categorical_cols) > 0:
         imputer = SimpleImputer(strategy=categorical_imputation_type, fill_value=categorical_imputation_value)
         data[categorical_cols] = imputer.fit_transform(data[categorical_cols])
     return data
