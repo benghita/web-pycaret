@@ -96,7 +96,6 @@ def main():
                         st.session_state.category,
                         st.session_state.col_to_drp
                     )
-            st.session_state.autom.s.setup(st.session_state.autom.df, target = st.session_state.autom.target, n_jobs = -1, normalize = True, session_id=123)
             st.session_state.changed = True
 
         df = st.session_state.autom.df
@@ -135,9 +134,10 @@ def main():
             st.header('Train & Evaluate Regression Models')
         else : st.warning('Can not specify the task')
         
-        st.text('Training .... execution will terminate after - 60 s - ')
         if  st.session_state.changed :
-            st.session_state.best = st.session_state.autom.s.compare_models(turbo = True, errors = 'ignore', budget_time = 1, verbose=False)
+            st.session_state.autom.s.setup(st.session_state.autom.df, target = st.session_state.autom.target, n_jobs = -1, normalize = True, session_id=123)
+            st.text('Training .... execution will terminate after - 150 s - ')
+            st.session_state.best = st.session_state.autom.s.compare_models(turbo = True, errors = 'ignore', budget_time = 2, verbose=False)
             st.session_state.changed = False
 
         best = st.session_state.best
