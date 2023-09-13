@@ -137,16 +137,15 @@ def main():
         
         st.text('Training .... execution will terminate after - 3 min - ')
         if  st.session_state.changed :
-            st.session_state.best = st.session_state.autom.s.compare_models(turbo = True, errors = 'ignore', budget_time = 3)
+            st.session_state.best = st.session_state.autom.s.compare_models(turbo = True, errors = 'ignore', budget_time = 3, verbose=False)
             st.session_state.changed = False
 
         best = st.session_state.best
         st.subheader(f'The Best Model : {best}')
 
-        st.text('Generating results ...')
-        leaderboard = st.session_state.autom.s.get_leaderboard()
         st.subheader('Leaderboard of the trained models  :')
-        st.write(leaderboard.drop(columns=['Model']))
+        metrics = st.session_state.autom.s.pull()
+        st.write(metrics)
 
         st.subheader('Analyze the performance of the best model : ')
 
