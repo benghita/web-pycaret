@@ -136,8 +136,8 @@ def main():
         
         if  st.session_state.changed :
             st.session_state.autom.s.setup(st.session_state.autom.df, target = st.session_state.autom.target, n_jobs = -1, normalize = True, session_id=123)
-            st.text('Training (lr,dt,rf,et,knn,svm and xgboost models).... execution will terminate shortly - ')
-            st.session_state.best = st.session_state.autom.s.compare_models(turbo = True, errors = 'ignore', include = ['lr', 'dt', 'rf', 'et', 'knn', 'svm','xgboost'], budget_time = 2, verbose=False)
+            st.text('Training (lr,dt,rf,et,knn and svm models).... execution will terminate shortly - ')
+            st.session_state.best = st.session_state.autom.s.compare_models(turbo = True, errors = 'ignore', include = ['lr', 'dt', 'rf', 'et', 'knn', 'svm'], budget_time = 2, verbose=False)
             st.session_state.changed = False
 
         best = st.session_state.best
