@@ -136,7 +136,7 @@ def main():
         
         if  st.session_state.changed :
             st.session_state.autom.s.setup(st.session_state.autom.df, target = st.session_state.autom.target, n_jobs = -1, normalize = True, session_id=123)
-            st.text('Training .... execution will terminate after - 150 s - ')
+            st.text('Training .... execution will terminate shortly - ')
             st.session_state.best = st.session_state.autom.s.compare_models(turbo = True, errors = 'ignore', include = ['lr', 'dt', 'rf'], budget_time = 2, verbose=False)
             st.session_state.changed = False
 
